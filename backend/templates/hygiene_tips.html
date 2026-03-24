@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Hygiene Tips{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Hygiene and care module</h1>
+    <p class="subtitle">Grooming, bathing, cleaning, vaccination reminders, and general health maintenance.</p>
+</section>
+
+<section class="grid">
+    <article class="card">
+        <h2>Grooming tips</h2>
+        <ul class="bullet-list">
+            {% for t in tips.grooming %}
+                <li>{{ t }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+
+    <article class="card">
+        <h2>Bathing tips</h2>
+        <ul class="bullet-list">
+            {% for t in tips.bathing %}
+                <li>{{ t }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+
+    <article class="card">
+        <h2>Cleaning tips</h2>
+        <ul class="bullet-list">
+            {% for t in tips.cleaning %}
+                <li>{{ t }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+
+    <article class="card">
+        <h2>Vaccination &amp; reminders</h2>
+        <ul class="bullet-list">
+            {% for t in tips.reminders %}
+                <li>{{ t }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+</section>
+{% endblock %}
+

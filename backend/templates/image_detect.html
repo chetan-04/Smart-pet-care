@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}AI Image Detection{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>AI image detection</h1>
+    <p class="subtitle">
+        Upload a pet photo and let the pre-trained image model guess whether it is a dog or a cat.
+    </p>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <h2>Upload image</h2>
+        <form method="post" enctype="multipart/form-data" class="form">
+            <div class="form-group">
+                <label for="image">Pet image (JPG or PNG)</label>
+                <input id="image" name="image" type="file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Detect pet type</button>
+        </form>
+    </article>
+
+    <article class="card">
+        <h2>Result</h2>
+        {% if error %}
+            <p class="error-text">{{ error }}</p>
+        {% elif prediction %}
+            <p class="prediction">{{ prediction }}</p>
+        {% else %}
+            <p>No image has been analyzed yet.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}
+

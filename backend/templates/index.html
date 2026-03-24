@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h1>SmartPet Care</h1>
+        <p class="subtitle">
+            An AI-powered assistant that helps you manage your pet's health, diet, vaccinations, and daily care.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Create Free Account</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline">Login</a>
+        </div>
+        <ul class="hero-list">
+            <li>Smart dashboard with pet profiles</li>
+            <li>AI symptom checker and health advice</li>
+            <li>Image-based dog vs cat detection</li>
+        </ul>
+    </div>
+    <div class="hero-illustration">
+        <div class="pet-card pet-card-dog">
+            <h3>Buddy</h3>
+            <p>2 years · Dog</p>
+            <span class="tag tag-success">Healthy</span>
+        </div>
+        <div class="pet-card pet-card-cat">
+            <h3>Luna</h3>
+            <p>1 year · Cat</p>
+            <span class="tag tag-info">Checkup due</span>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

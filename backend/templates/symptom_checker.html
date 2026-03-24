@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Symptom Checker{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Symptom checker</h1>
+    <p class="subtitle">
+        Select a pet and mark the symptoms you observe. The assistant will provide basic advice
+        and recommend when to see a veterinarian.
+    </p>
+    <p class="note">This tool is for educational use only and does not replace professional veterinary care.</p>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <h2>Check symptoms</h2>
+        <form method="post" class="form">
+            <div class="form-group">
+                <label for="pet_id">Select pet</label>
+                <select id="pet_id" name="pet_id" required>
+                    <option value="">Choose a pet</option>
+                    {% for pet in pets %}
+                        <option value="{{ pet.id }}">{{ pet.name }} ({{ pet.species }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Symptoms</label>
+                <div class="symptom-grid">
+                    <label><input type="checkbox" name="symptoms" value="fever"> Fever</label>
+                    <label><input type="checkbox" name="symptoms" value="vomiting"> Vomiting</label>
+                    <label><input type="checkbox" name="symptoms" value="diarrhea"> Diarrhea</label>
+                    <label><input type="checkbox" name="symptoms" value="loss_of_appetite"> Loss of appetite</label>
+                    <label><input type="checkbox" name="symptoms" value="weakness"> Weakness</label>
+                    <label><input type="checkbox" name="symptoms" value="coughing"> Coughing</label>
+                    <label><input type="checkbox" name="symptoms" value="sneezing"> Sneezing</label>
+                    <label><input type="checkbox" name="symptoms" value="itching"> Itching / scratching</label>
+                    <label><input type="checkbox" name="symptoms" value="difficulty_breathing"> Difficulty breathing</label>
+                    <label><input type="checkbox" name="symptoms" value="seizures"> Seizures</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">Analyze symptoms</button>
+        </form>
+    </article>
+
+    <article class="card">
+        <h2>Advice</h2>
+        {% if advice %}
+            <p><strong>Severity:</strong> <span class="tag">{{ severity }}</span></p>
+            <p>{{ advice }}</p>
+        {% else %}
+            <p>Select a pet and one or more symptoms to view advice.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}
+

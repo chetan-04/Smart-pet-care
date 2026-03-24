@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Health History{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Health check history</h1>
+    <p class="subtitle">Your latest AI image-based health detections.</p>
+</section>
+
+<section class="grid">
+    {% if checks %}
+        {% for c in checks %}
+            <article class="card">
+                <header class="card-header">
+                    <h2>Check #{{ c.id }}</h2>
+                    <span class="tag tag-info">{{ c.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+                </header>
+                <div class="card-body">
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="tag {% if c.condition == 'Healthy' %}tag-success{% else %}tag-danger{% endif %}">
+                            {{ c.condition }}
+                        </span>
+                        <span class="tag tag-info">{{ (c.confidence * 100) | round(1) }}%</span>
+                    </p>
+                    {% if c.issue %}
+                        <p><strong>Possible issue:</strong> {{ c.issue }}</p>
+                    {% endif %}
+                    {% if c.pet_id and pet_map.get(c.pet_id) %}
+                        <p><strong>Pet:</strong> {{ pet_map.get(c.pet_id).name }} ({{ pet_map.get(c.pet_id).species }})</p>
+                    {% endif %}
+                    <a class="link" href="{{ url_for('uploaded_file', filename=c.image_filename) }}">View uploaded image →</a>
+                </div>
+            </article>
+        {% endfor %}
+    {% else %}
+        <article class="card">
+            <p>No health checks yet.</p>
+            <a class="btn btn-primary" href="{{ url_for('health_detect') }}">Run your first health check</a>
+        </article>
+    {% endif %}
+</section>
+{% endblock %}
+

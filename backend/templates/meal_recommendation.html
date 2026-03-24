@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Meal Recommendation{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Weight-based meal recommendation</h1>
+    <p class="subtitle">Enter weight and age to get daily food quantity, frequency, and food type suggestions.</p>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <h2>Input</h2>
+        <form method="post" class="form">
+            <div class="form-group">
+                <label for="species">Pet type</label>
+                <select id="species" name="species" required>
+                    {% for key, meta in pet_types.items() %}
+                        <option value="{{ key }}">{{ meta.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="age_years">Age (years)</label>
+                <input id="age_years" name="age_years" type="number" step="0.1" min="0" placeholder="e.g. 2.5" required>
+            </div>
+            <div class="form-group">
+                <label for="weight_kg">Weight (kg)</label>
+                <input id="weight_kg" name="weight_kg" type="number" step="0.1" min="0" placeholder="e.g. 12.0" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Calculate meal plan</button>
+            <p class="note">Tip: you can also use your saved pet values on the pet profile page.</p>
+        </form>
+    </article>
+
+    <article class="card">
+        <h2>Result</h2>
+        {% if error %}
+            <p class="error-text">{{ error }}</p>
+        {% elif meal %}
+            <p><strong>Recommended daily food:</strong> {{ meal.daily_food_grams }} g</p>
+            <p><strong>Meal frequency:</strong> {{ meal.meals_per_day }} times per day</p>
+            <p><strong>Food type suggestions:</strong></p>
+            <ul class="bullet-list">
+                {% for item in meal.food_type_suggestions %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% if meal.notes %}
+                <p><strong>Notes:</strong></p>
+                <ul class="bullet-list">
+                    {% for n in meal.notes %}
+                        <li>{{ n }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% else %}
+            <p>Enter details to calculate a meal plan.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}
+

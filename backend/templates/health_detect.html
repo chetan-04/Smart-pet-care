@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Health Detection{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>AI health detection (image)</h1>
+    <p class="subtitle">Upload a pet image to detect Healthy vs Sick and possible issues with confidence.</p>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <h2>Upload image</h2>
+        <form method="post" enctype="multipart/form-data" class="form">
+            <div class="form-group">
+                <label for="pet_id">Link to pet (optional)</label>
+                <select id="pet_id" name="pet_id">
+                    <option value="">-- Not linked --</option>
+                    {% for p in pets %}
+                        <option value="{{ p.id }}">{{ p.name }} ({{ p.species }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="image">Pet image (JPG or PNG)</label>
+                <input id="image" name="image" type="file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Analyze health</button>
+            <p class="note">Note: This is a demo AI feature and does not replace veterinary advice.</p>
+        </form>
+    </article>
+
+    <article class="card">
+        <h2>Result</h2>
+        {% if error %}
+            <p class="error-text">{{ error }}</p>
+        {% elif result %}
+            {% if uploaded_url %}
+                <img class="preview-img" src="{{ uploaded_url }}" alt="Uploaded pet image preview">
+            {% endif %}
+            <div class="result-row">
+                <span class="tag {% if result.condition == 'Healthy' %}tag-success{% else %}tag-danger{% endif %}">
+                    {{ result.condition }}
+                </span>
+                <span class="tag tag-info">{{ result.confidence_pct }}%</span>
+            </div>
+            {% if result.issue %}
+                <p><strong>Possible issue:</strong> {{ result.issue }}</p>
+            {% endif %}
+
+            {% if suggestions %}
+                <div class="card-wide subtle">
+                    <p><strong>Recommended action:</strong> {{ suggestions.recommended_action }}</p>
+                    <p><strong>Basic advice:</strong> {{ suggestions.basic_treatment }}</p>
+                </div>
+            {% endif %}
+
+            <div class="card-footer">
+                <a class="link" href="{{ url_for('health_history') }}">View health check history →</a>
+            </div>
+        {% else %}
+            <p>No image has been analyzed yet.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}
+

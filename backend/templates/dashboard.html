@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Your pets</h1>
+    <p class="subtitle">Overview of your pet profiles with quick AI care suggestions.</p>
+    <a href="{{ url_for('add_pet') }}" class="btn btn-primary">Add new pet</a>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <h2>Health Detection</h2>
+        <p class="subtitle">Upload a pet photo to detect possible health issues and get suggestions.</p>
+        <div class="card-footer">
+            <a class="link" href="{{ url_for('health_detect') }}">Run health check →</a>
+            <span class="spacer">·</span>
+            <a class="link" href="{{ url_for('health_history') }}">View history →</a>
+        </div>
+    </article>
+    <article class="card">
+        <h2>Smart Diet &amp; Meals</h2>
+        <p class="subtitle">Calculate daily food needs and generate a diet plan by species, age, and weight.</p>
+        <div class="card-footer">
+            <a class="link" href="{{ url_for('meal_recommendation') }}">Meal calculator →</a>
+            <span class="spacer">·</span>
+            <a class="link" href="{{ url_for('diet_recommendation') }}">Diet plan →</a>
+        </div>
+    </article>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <h2>Hygiene &amp; Care</h2>
+        <p class="subtitle">Grooming, cleaning, vaccination reminders, and general maintenance tips.</p>
+        <div class="card-footer">
+            <a class="link" href="{{ url_for('hygiene_module') }}">Open hygiene module →</a>
+        </div>
+    </article>
+    <article class="card">
+        <h2>Recent health checks</h2>
+        {% if recent_checks %}
+            <ul class="bullet-list">
+                {% for c in recent_checks %}
+                    <li>
+                        <strong>{{ c.condition }}</strong>
+                        {% if c.issue %} — {{ c.issue }}{% endif %}
+                        ({{ (c.confidence * 100) | round(1) }}%)
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="card-footer">
+                <a class="link" href="{{ url_for('health_history') }}">See all history →</a>
+            </div>
+        {% else %}
+            <p>No health checks yet. Upload an image to start.</p>
+        {% endif %}
+    </article>
+</section>
+
+{% if pet_cards %}
+    <section class="grid">
+        {% for card in pet_cards %}
+            <article class="card card-pet">
+                <header class="card-header">
+                    <h2>{{ card.icon }} {{ card.pet.name }}</h2>
+                    <span class="tag">{{ card.species_label }}</span>
+                </header>
+                <div class="card-body">
+                    <p><strong>Age:</strong> {{ "%.1f"|format(card.pet.age_years) }} years</p>
+                    <p><strong>Weight:</strong> {{ "%.1f"|format(card.pet.weight_kg) }} kg</p>
+                    <p class="card-highlight"><strong>Diet suggestion:</strong> {{ card.diet }}</p>
+                    <ul class="bullet-list">
+                        {% for v in card.vaccinations %}
+                            <li>{{ v }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <footer class="card-footer">
+                    <a href="{{ url_for('pet_detail', pet_id=card.pet.id) }}" class="link">View full profile →</a>
+                </footer>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state">
+        <p>You have not added any pets yet.</p>
+        <a href="{{ url_for('add_pet') }}" class="btn btn-primary">Add your first pet</a>
+    </section>
+{% endif %}
+{% endblock %}
+
